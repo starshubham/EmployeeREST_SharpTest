@@ -29,7 +29,10 @@ namespace EmployeeRESTSharpTest
             return response;
         }
 
-        
+        /* UC1:- Ability to Retrieve all Employees in EmployeePayroll JSON Server.
+                 - Use JSON Server and RESTSharp to save the EmployeePayroll Data of id, name, and salary.
+                 - Retrieve in the MSTest Test and corresponding update the Memory with the Data.
+        */
         [TestMethod]
         public void onCallingGETApi_ReturnEmployeeList()
         {
