@@ -1,0 +1,6 @@
+.vs/
+bin/
+obj/
+EmployeeRESTSharpTest.sln
+EmployeeRESTSharpTest.csproj
+TestResults/
