@@ -80,6 +80,44 @@ namespace EmployeeRESTSharpTest
             System.Console.WriteLine(response.Content);
         }
 
+        /*UC3:- Ability to add multiple Employee to  the EmployeePayroll JSON Server.
+                - Use JSON Server and RESTSharp to add  multiple Employees to Payroll
+                - Ability to add using RESTSharp to  JSONServer in the MSTest Test Case and  then on success add to  EmployeePayrollService
+                - Validate with the successful Count
+        */
+
+        [TestMethod]
+        public void GivenMultipleEmployee_OnPost_ThenShouldReturnEmployeeList()
+        {
+            // Arrange
+            List<Employee> employeeList = new List<Employee>();
+            employeeList.Add(new Employee { name = "Vinaya", salary = "15000" });
+            employeeList.Add(new Employee { name = "Ajaya kumar", salary = "7000" });
+            employeeList.Add(new Employee { name = "Powan", salary = "9000" });
+            employeeList.Add(new Employee { name = "Swathi", salary = "12000" });
+            // Iterate the loop for each employee
+            foreach (var emp in employeeList)
+            {
+                // Initialize the request for POST to add new employee
+                RestRequest request = new RestRequest("/employees", Method.Post);
+                JObject jsonObj = new JObject();
+                jsonObj.Add("name", emp.name);
+                jsonObj.Add("salary", emp.salary);
+                // Added parameters to the request object such as the content-type and attaching the jsonObj with the request
+                request.AddParameter("application/json", jsonObj, ParameterType.RequestBody);
+
+                //Act
+                RestResponse response = client.ExecuteAsync(request).Result;
+
+                //Assert
+                Assert.AreEqual(response.StatusCode, HttpStatusCode.Created);
+                Employee employee = JsonConvert.DeserializeObject<Employee>(response.Content);
+                Assert.AreEqual(emp.name, employee.name);
+                Assert.AreEqual(emp.salary, employee.salary);
+                System.Console.WriteLine(response.Content);
+            }
+        }
+
         
     }
 }
