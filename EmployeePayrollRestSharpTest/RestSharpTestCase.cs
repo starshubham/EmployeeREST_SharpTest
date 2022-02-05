@@ -1,6 +1,8 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using RestSharp;
+using System;
 using System.Collections.Generic;
 using System.Net;
 
@@ -45,8 +47,39 @@ namespace EmployeeRESTSharpTest
 
             foreach (Employee e in dataResponse)
             {
-                System.Console.WriteLine("id: " + e.id + ", Name: " + e.name + ", Salary: " + e.Salary);
+                System.Console.WriteLine("id: " + e.id + ", Name: " + e.name + ", Salary: " + e.salary);
             }
         }
+
+        /* UC2:- Ability to add a new Employee to the EmployeePayroll JSON Server.
+                 - Use JSON Server and RESTSharp to save the EmployeePayroll Data of id, name, and salary.
+                 - Ability to add using RESTSharp to JSONServer in the MSTest Test Case and then on success add to Employee Payroll .
+                 - Validate with the successful Count 
+        */
+        [TestMethod]
+        public void OnCallingPostAPI_ReturnEmployeeObject()
+        {
+            // Arrange
+            // Initialize the request for POST to add new employee
+            RestRequest request = new RestRequest("/employees", Method.Post);
+            JObject jObjectBody = new JObject();          // JObject Comes from using Newtonsoft.Json.Linq Namespace
+            jObjectBody.Add("name", "Clark");
+            jObjectBody.Add("salary", "15000");
+
+            // Added parameters to the request object such as the content-type and attaching the jObjectBody with the request
+            request.AddParameter("application/json", jObjectBody, ParameterType.RequestBody);
+
+            //Act
+            RestResponse response = client.ExecuteAsync(request).Result;
+
+            //Assert
+            Assert.AreEqual(response.StatusCode, HttpStatusCode.Created);
+            Employee dataResponse = JsonConvert.DeserializeObject<Employee>(response.Content);
+            Assert.AreEqual("Clark", dataResponse.name);
+            Assert.AreEqual("15000", dataResponse.salary);
+            System.Console.WriteLine(response.Content);
+        }
+
+        
     }
 }
