@@ -118,6 +118,32 @@ namespace EmployeeRESTSharpTest
             }
         }
 
-        
+        /*UC4:- Ability to Update Salary in Employee Payroll JSON Server.
+                - Firstly Update the Salary in Memory.
+                - Post that Use JSON Server and RESTSharp to Update the salary.
+        */
+        [TestMethod]
+        public void OnCallingPutAPI_ReturnEmployeeObject()
+        {
+            // Arrange
+            // Initialize the request for PUT to add new employee
+            RestRequest request = new RestRequest("/employees/12", Method.Put);
+            JObject jsonObj = new JObject();
+            jsonObj.Add("Name", "Shubham");
+            jsonObj.Add("Salary", "65000");
+            // Added parameters to the request object such as the content-type and attaching the jsonObj with the request
+            request.AddParameter("application/json", jsonObj, ParameterType.RequestBody);
+
+            // Act
+            RestResponse response = client.ExecuteAsync(request).Result;
+
+            // Assert
+            Assert.AreEqual(HttpStatusCode.OK, response.StatusCode);
+            Employee employee = JsonConvert.DeserializeObject<Employee>(response.Content);
+            Assert.AreEqual("Shubham", employee.name);
+            Assert.AreEqual("65000", employee.salary);
+            Console.WriteLine(response.Content);
+        }
+      
     }
 }
