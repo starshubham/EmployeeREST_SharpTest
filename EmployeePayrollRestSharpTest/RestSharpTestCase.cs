@@ -62,12 +62,14 @@ namespace EmployeeRESTSharpTest
             // Arrange
             // Initialize the request for POST to add new employee
             RestRequest request = new RestRequest("/employees", Method.Post);
-            JObject jObjectBody = new JObject();          // JObject Comes from using Newtonsoft.Json.Linq Namespace
-            jObjectBody.Add("name", "Clark");
-            jObjectBody.Add("salary", "15000");
+            request.RequestFormat = DataFormat.Json;
 
-            // Added parameters to the request object such as the content-type and attaching the jObjectBody with the request
-            request.AddParameter("application/json", jObjectBody, ParameterType.RequestBody);
+            request.AddBody(new Employee
+            {
+                id = 4,
+                name = "Clark",
+                salary = "15000"
+            });
 
             //Act
             RestResponse response = client.ExecuteAsync(request).Result;
@@ -100,11 +102,10 @@ namespace EmployeeRESTSharpTest
             {
                 // Initialize the request for POST to add new employee
                 RestRequest request = new RestRequest("/employees", Method.Post);
-                JObject jsonObj = new JObject();
-                jsonObj.Add("name", emp.name);
-                jsonObj.Add("salary", emp.salary);
-                // Added parameters to the request object such as the content-type and attaching the jsonObj with the request
-                request.AddParameter("application/json", jsonObj, ParameterType.RequestBody);
+                request.RequestFormat = DataFormat.Json;
+
+                //Added parameters to the request object such as the content-type and attaching the jsonObj with the request
+                request.AddBody(emp);
 
                 //Act
                 RestResponse response = client.ExecuteAsync(request).Result;
@@ -151,6 +152,24 @@ namespace EmployeeRESTSharpTest
             Assert.AreEqual("65000", employee.salary);
             Console.WriteLine(response.Content);
         }
-      
+
+        /*UC5:- Ability to Delete Employee from Employee Payroll JSON Server.
+                - Use JSON Server and RESTSharp to then delete the employee by ID.
+                - Delete the Employee from the Memory.
+        */
+        [TestMethod]
+        public void OnCallingDeleteAPI_ReturnSuccessStatus()
+        {
+            // Arrange
+            // Initialize the request for PUT to add new employee
+            RestRequest request = new RestRequest("/employees/4", Method.Delete);
+
+            // Act
+            RestResponse response = client.ExecuteAsync(request).Result;
+
+            // Assert
+            Assert.AreEqual(HttpStatusCode.OK, response.StatusCode);
+            Console.WriteLine(response.Content);
+        }
     }
 }
