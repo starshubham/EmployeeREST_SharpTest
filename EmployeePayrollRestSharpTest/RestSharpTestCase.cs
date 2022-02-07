@@ -102,11 +102,10 @@ namespace EmployeeRESTSharpTest
             {
                 // Initialize the request for POST to add new employee
                 RestRequest request = new RestRequest("/employees", Method.Post);
-                JObject jsonObj = new JObject();
-                jsonObj.Add("name", emp.name);
-                jsonObj.Add("salary", emp.salary);
-                // Added parameters to the request object such as the content-type and attaching the jsonObj with the request
-                request.AddParameter("application/json", jsonObj, ParameterType.RequestBody);
+                request.RequestFormat = DataFormat.Json;
+
+                //Added parameters to the request object such as the content-type and attaching the jsonObj with the request
+                request.AddBody(emp);
 
                 //Act
                 RestResponse response = client.ExecuteAsync(request).Result;
