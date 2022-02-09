@@ -62,12 +62,14 @@ namespace EmployeeRESTSharpTest
             // Arrange
             // Initialize the request for POST to add new employee
             RestRequest request = new RestRequest("/employees", Method.Post);
-            JObject jObjectBody = new JObject();          // JObject Comes from using Newtonsoft.Json.Linq Namespace
-            jObjectBody.Add("name", "Clark");
-            jObjectBody.Add("salary", "15000");
+            request.RequestFormat = DataFormat.Json;
 
-            // Added parameters to the request object such as the content-type and attaching the jObjectBody with the request
-            request.AddParameter("application/json", jObjectBody, ParameterType.RequestBody);
+            request.AddBody(new Employee
+            {
+                id = 4,
+                name = "Clark",
+                salary = "15000"
+            });
 
             //Act
             RestResponse response = client.ExecuteAsync(request).Result;
@@ -79,6 +81,7 @@ namespace EmployeeRESTSharpTest
             Assert.AreEqual("15000", dataResponse.salary);
             System.Console.WriteLine(response.Content);
         }
+
 
         /*UC3:- Ability to add multiple Employee to  the EmployeePayroll JSON Server.
                 - Use JSON Server and RESTSharp to add  multiple Employees to Payroll
@@ -100,11 +103,10 @@ namespace EmployeeRESTSharpTest
             {
                 // Initialize the request for POST to add new employee
                 RestRequest request = new RestRequest("/employees", Method.Post);
-                JObject jsonObj = new JObject();
-                jsonObj.Add("name", emp.name);
-                jsonObj.Add("salary", emp.salary);
-                // Added parameters to the request object such as the content-type and attaching the jsonObj with the request
-                request.AddParameter("application/json", jsonObj, ParameterType.RequestBody);
+                request.RequestFormat = DataFormat.Json;
+
+                //Added parameters to the request object such as the content-type and attaching the jsonObj with the request
+                request.AddBody(emp);
 
                 //Act
                 RestResponse response = client.ExecuteAsync(request).Result;
@@ -135,11 +137,6 @@ namespace EmployeeRESTSharpTest
                 name = "Shubham",
                 salary = "65000"
             });
-            //JObject jsonObj = new JObject();
-            //jsonObj.Add("Name", "Shubham");
-            //jsonObj.Add("Salary", "65000");
-            //// Added parameters to the request object such as the content-type and attaching the jsonObj with the request
-            //request.AddParameter("application/json", jsonObj, ParameterType.RequestBody);
 
             // Act
             RestResponse response = client.ExecuteAsync(request).Result;
