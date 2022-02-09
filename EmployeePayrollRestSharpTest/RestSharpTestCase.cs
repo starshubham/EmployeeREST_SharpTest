@@ -129,11 +129,18 @@ namespace EmployeeRESTSharpTest
             // Arrange
             // Initialize the request for PUT to add new employee
             RestRequest request = new RestRequest("/employees/12", Method.Put);
-            JObject jsonObj = new JObject();
-            jsonObj.Add("Name", "Shubham");
-            jsonObj.Add("Salary", "65000");
-            // Added parameters to the request object such as the content-type and attaching the jsonObj with the request
-            request.AddParameter("application/json", jsonObj, ParameterType.RequestBody);
+            request.RequestFormat = DataFormat.Json;
+
+            request.AddBody(new Employee
+            {
+                name = "Shubham",
+                salary = "65000"
+            });
+            //JObject jsonObj = new JObject();
+            //jsonObj.Add("Name", "Shubham");
+            //jsonObj.Add("Salary", "65000");
+            //// Added parameters to the request object such as the content-type and attaching the jsonObj with the request
+            //request.AddParameter("application/json", jsonObj, ParameterType.RequestBody);
 
             // Act
             RestResponse response = client.ExecuteAsync(request).Result;
