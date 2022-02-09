@@ -82,6 +82,7 @@ namespace EmployeeRESTSharpTest
             System.Console.WriteLine(response.Content);
         }
 
+
         /*UC3:- Ability to add multiple Employee to  the EmployeePayroll JSON Server.
                 - Use JSON Server and RESTSharp to add  multiple Employees to Payroll
                 - Ability to add using RESTSharp to  JSONServer in the MSTest Test Case and  then on success add to  EmployeePayrollService
@@ -136,11 +137,6 @@ namespace EmployeeRESTSharpTest
                 name = "Shubham",
                 salary = "65000"
             });
-            //JObject jsonObj = new JObject();
-            //jsonObj.Add("Name", "Shubham");
-            //jsonObj.Add("Salary", "65000");
-            //// Added parameters to the request object such as the content-type and attaching the jsonObj with the request
-            //request.AddParameter("application/json", jsonObj, ParameterType.RequestBody);
 
             // Act
             RestResponse response = client.ExecuteAsync(request).Result;
@@ -153,23 +149,5 @@ namespace EmployeeRESTSharpTest
             Console.WriteLine(response.Content);
         }
 
-        /*UC5:- Ability to Delete Employee from Employee Payroll JSON Server.
-                - Use JSON Server and RESTSharp to then delete the employee by ID.
-                - Delete the Employee from the Memory.
-        */
-        [TestMethod]
-        public void OnCallingDeleteAPI_ReturnSuccessStatus()
-        {
-            // Arrange
-            // Initialize the request for PUT to add new employee
-            RestRequest request = new RestRequest("/employees/4", Method.Delete);
-
-            // Act
-            RestResponse response = client.ExecuteAsync(request).Result;
-
-            // Assert
-            Assert.AreEqual(HttpStatusCode.OK, response.StatusCode);
-            Console.WriteLine(response.Content);
-        }
     }
 }
